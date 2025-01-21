@@ -1,9 +1,11 @@
 ﻿using DoctorTime.API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DoctorTime.API.Context
 {
-    public class PostgreSQL : DbContext
+    public class PostgreSQL : IdentityDbContext<IdentityUser>
     {
         public PostgreSQL(DbContextOptions<PostgreSQL> options) : base(options)
         {
