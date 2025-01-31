@@ -6,19 +6,14 @@ namespace DoctorTime.API.Entities
 {
     public class Appointment : BaseEntity
     {
-        [Required]
 
         public DateTime DateTime { get; set; }
-        [Required]
 
         public string Modality { get; set; }
-        [Column(TypeName = "text")]
         public Status Status { get; set; }
-        [Required]
 
         public long DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
-        [Required]
 
         public long UserId { get; set; }
         public User? User { get; set; }

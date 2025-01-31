@@ -8,32 +8,27 @@ using DoctorTime.API.DTO.UserDTO;
 
 namespace DoctorTime.API.Entities
 {
-    public class User : BaseEntity
+    public class User : BaseEntity, AuthenticationUser
     {
-        [Required]
 
         public string Name { get; set; }
-        [EmailAddress(ErrorMessage ="Informe um e-mail válido")]
         public string Email { get; set; }
-        [Required]
         public string Address;
-        [Required]
-
         public string Cpf { get; set; }
-        [Required]
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
 
-        public string Password { get; set; }
-        [Column(TypeName = "text")]
         public Role Role { get; private set; } = Role.USER;
-        ICollection<Appointment> Appointments { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
 
-        public User(long id, string name,string address, string email, string cpf, string password) : base(id)
+        public User(long id, string name, string address, string email, string cpf, byte[] passwordHash, byte[] passwordSalt) : base(id)
         {
             Name = name;
             Address = address;
             Email = email;
             Cpf = cpf;
-            Password = password;
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
             Appointments = new Collection<Appointment>();
 
         }
@@ -48,12 +43,12 @@ namespace DoctorTime.API.Entities
                 Name = UserUpdateDTO.Name;
             }
 
-        
+
             if (UserUpdateDTO.Address != null)
             {
                 Address = UserUpdateDTO.Address;
             }
-            
+
         }
     }
 }

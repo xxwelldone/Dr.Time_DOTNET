@@ -5,28 +5,28 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DoctorTime.API.Entities
 {
-    public class Worker : BaseEntity
+    public class Worker : BaseEntity, AuthenticationUser
     {
-        [Required]
 
         public string Name { get; set; }
-        [EmailAddress(ErrorMessage ="Informe um e-mail válido")]
         public string Email { get; set; }
-        [Required]
 
         public string Setor { get; set; }
-        public string Password { get; set; }
-        [Column(TypeName = "text")]
+   
         public Role Role { get; private set; } = Role.WORKER;
 
-        
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
 
-        public Worker(long id, string name, string email, string setor, string password) : base(id)
+        public Worker(long id, string name, string email, string setor, byte[] passwordHash, byte[] passwordSalt) : base(id)
         {
             Name = name;
             Email = email;
             Setor = setor;
-            Password = password;
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
+
+
         }
 
         public Worker()

@@ -10,7 +10,7 @@ namespace DoctorTime.API.DTO.Mapping
         public DTOMapping()
         {
             CreateMap<User, UserResponseDTO>();
-            CreateMap<UserRequestDTO, User>();
+            CreateMap<UserRequestDTO, User>().ReverseMap();
             //CreateMap<UserUpdateDTO, User>();
 
             CreateMap<Doctor, DoctorResposeDTO>();
