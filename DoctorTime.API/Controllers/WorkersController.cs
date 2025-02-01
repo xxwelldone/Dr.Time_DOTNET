@@ -1,6 +1,8 @@
 ﻿using DoctorTime.API.Context;
+using DoctorTime.API.DTO.WorkerDTO;
 using DoctorTime.API.Entities;
 using DoctorTime.API.Repository.Interfaces;
+using DoctorTime.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,69 +15,91 @@ namespace DoctorTime.API.Controllers
     [ApiController]
     public class WorkersController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWorkerService _workerService;
 
-        public WorkersController(IUnitOfWork unitOfWork)
+        public WorkersController(IWorkerService workerService)
         {
-            _unitOfWork = unitOfWork;
+            _workerService = workerService;
         }
 
         [HttpGet]
         [Authorize]
 
-        public async Task<ActionResult<IEnumerable<Worker>>> Get()
+        public async Task<ActionResult<IEnumerable<WorkerResponseDTO>>> Get()
         {
-
-            IEnumerable<Worker> workers = await _unitOfWork.WorkerRepository.GetAllAsync();
-            return Ok(workers);
+            try
+            {
+                IEnumerable<WorkerResponseDTO> workerResponseDTO = await _workerService.GetAsync();
+                return Ok(workerResponseDTO);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
         [HttpGet("{id}", Name = "GetWorkerById")]
         [Authorize]
 
-        public async Task<ActionResult<Worker>> GetById(long id)
+        public async Task<ActionResult<WorkerResponseDTO>> GetById(long id)
         {
-            Worker worker = await _unitOfWork.WorkerRepository.GetByExpression(x => x.Id == id);
-            return Ok(worker);
+            try
+            {
+                WorkerResponseDTO worker = await _workerService.GetByIdAsync(id);
+                return Ok(worker);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
         [HttpPost]
-        public async Task<ActionResult<Worker>> Post([FromBody] Worker worker)
+        public async Task<ActionResult<WorkerResponseDTO>> Post([FromBody] WorkerRequestDTO worker)
         {
-            Worker newWorker = await _unitOfWork.WorkerRepository.Create(worker);
-            await _unitOfWork.Commit();
-            return new CreatedAtRouteResult(
-                routeName: "GetWorkerById",
-                routeValues: new { id = newWorker.Id },
-                value: newWorker
-                );
+            try
+            {
+                WorkerResponseDTO newWorker = await _workerService.PostAsync(worker);
+
+                return new CreatedAtRouteResult(
+                    routeName: "GetWorkerById",
+                    routeValues: new { id = newWorker.Id },
+                    value: newWorker
+                    );
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPut("{id}")]
         [Authorize]
 
-        public async Task<ActionResult<Worker>> Put(long id, [FromBody] Worker worker)
+        public async Task<ActionResult<WorkerResponseDTO>> Put(long id, [FromBody] WorkerUpdateDTO worker)
         {
-            if (id != worker.Id)
+            try
             {
-                return BadRequest();
+                WorkerResponseDTO workerResponseDTO = await _workerService.PutAsync(id, worker);
+                return Ok(workerResponseDTO);
             }
-            _unitOfWork.WorkerRepository.Update(worker);
-            await _unitOfWork.Commit();
-
-
-            return Ok(worker);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpDelete("{id}")]
         [Authorize]
 
-        public async Task<ActionResult<Worker>> Delete(long id)
+        public async Task<ActionResult<WorkerResponseDTO>> Delete(long id)
         {
-            Worker worker = await _unitOfWork.WorkerRepository.GetByExpression(x => x.Id == id);
-            if (worker is null)
+
+            try
             {
-                return NotFound();
+                WorkerResponseDTO workerResponseDTO = await _workerService.DeleteAsync(id);
+                return Ok(workerResponseDTO);
             }
-            _unitOfWork.WorkerRepository.Delete(worker);
-            await _unitOfWork.Commit();
-            return Ok(worker);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
     }

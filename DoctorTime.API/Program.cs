@@ -30,7 +30,7 @@ namespace DoctorTime.API
             builder.Services.AddSwaggerGen(
                             swagger =>
                             {
-                                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "FinanceNOW", Description = "Dr.Time is an API for Appointment Management", Version = "v1" });
+                                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Dr.Time", Description = "Dr.Time is an API for Appointment Management", Version = "v1" });
                                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                                 {
                                     Name = "Authorization",
@@ -65,6 +65,7 @@ namespace DoctorTime.API
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IWorkerService, WorkerService>();
 
             builder.Services.AddAuthentication(opt =>
             {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DoctorTime.API.DTO.DoctorDTO;
 using DoctorTime.API.DTO.UserDTO;
+using DoctorTime.API.DTO.WorkerDTO;
 using DoctorTime.API.Entities;
 
 namespace DoctorTime.API.DTO.Mapping
@@ -16,6 +17,11 @@ namespace DoctorTime.API.DTO.Mapping
             CreateMap<Doctor, DoctorResposeDTO>();
             CreateMap<DoctorRequestDTO, Doctor>();
             //CreateMap<DoctorUpdateDTO, Doctor>();
+
+            CreateMap<Worker, WorkerResponseDTO>();
+            CreateMap<WorkerRequestDTO, Worker>();
+
+
         }
     }
 }
