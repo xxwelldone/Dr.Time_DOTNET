@@ -1,6 +1,7 @@
 ﻿using DoctorTime.API.Context;
 using DoctorTime.API.Entities;
 using DoctorTime.API.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,8 @@ namespace DoctorTime.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+
         public async Task<ActionResult<IEnumerable<Worker>>> Get()
         {
 
@@ -27,6 +30,8 @@ namespace DoctorTime.API.Controllers
             return Ok(workers);
         }
         [HttpGet("{id}", Name = "GetWorkerById")]
+        [Authorize]
+
         public async Task<ActionResult<Worker>> GetById(long id)
         {
             Worker worker = await _unitOfWork.WorkerRepository.GetByExpression(x => x.Id == id);
@@ -44,6 +49,8 @@ namespace DoctorTime.API.Controllers
                 );
         }
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<Worker>> Put(long id, [FromBody] Worker worker)
         {
             if (id != worker.Id)
@@ -57,6 +64,8 @@ namespace DoctorTime.API.Controllers
             return Ok(worker);
         }
         [HttpDelete("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<Worker>> Delete(long id)
         {
             Worker worker = await _unitOfWork.WorkerRepository.GetByExpression(x => x.Id == id);

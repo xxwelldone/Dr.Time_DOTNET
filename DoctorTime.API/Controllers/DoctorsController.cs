@@ -1,11 +1,14 @@
 ﻿
 
+using System.Collections.Generic;
 using System.Net;
 using AutoMapper;
 using DoctorTime.API.Context;
 using DoctorTime.API.DTO.DoctorDTO;
 using DoctorTime.API.Entities;
 using DoctorTime.API.Repository.Interfaces;
+using DoctorTime.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,74 +18,114 @@ namespace DoctorTime.API.Controllers
     [Route("api/[controller]")]
     public class DoctorsController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        IDoctorService _service;
 
-        public DoctorsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public DoctorsController(IDoctorService service)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _service = service;
         }
+
         [HttpGet]
+        [Authorize]
+
         public async Task<ActionResult<IEnumerable<DoctorResposeDTO>>> Get()
         {
-            IEnumerable<Doctor> doctors = await this._unitOfWork.DoctorRepository.GetAllAsync();
+            try
+            {
+                IEnumerable<DoctorResposeDTO> doctorResposeDTOs = await _service.GetAllAsync();
 
-            IEnumerable<DoctorResposeDTO> doctorResposeDTOs = _mapper.Map<IEnumerable<DoctorResposeDTO>>(doctors);
+                return Ok(doctorResposeDTOs);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
 
-            return Ok(doctorResposeDTOs);
         }
         [HttpGet("{id}", Name = "GetDoctorById")]
+        [Authorize]
+
         public async Task<ActionResult<DoctorResposeDTO>> GetById(long id)
         {
-            Doctor doctor = await this._unitOfWork.DoctorRepository.GetByExpression(x => x.Id == id);
-            DoctorResposeDTO doctorResposeDTO = _mapper.Map<DoctorResposeDTO>(doctor);
+            try
+            {
+                DoctorResposeDTO doctorResposeDTO = await _service.GetById(id);
 
-            return Ok(doctorResposeDTO);
+                return Ok(doctorResposeDTO);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
         [HttpGet("/{specialty}")]
+        [Authorize]
+
         public async Task<ActionResult<IEnumerable<DoctorResposeDTO>>> GetBySpecialty(string specialty)
         {
-            IEnumerable<Doctor> doctors = await _unitOfWork.DoctorRepository.GetBySpecialty(specialty);
-            IEnumerable<DoctorResposeDTO> doctorResposeDTOs = _mapper.Map<IEnumerable<DoctorResposeDTO>>(doctors);
-            return Ok(doctorResposeDTOs);
+            try
+            {
+                IEnumerable<DoctorResposeDTO> doctorResposeDTOs = await _service.GetBySpecialty(specialty);
+                return Ok(doctorResposeDTOs);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
         [HttpPost]
         public async Task<ActionResult<DoctorResposeDTO>> Post([FromBody] DoctorRequestDTO doctor)
         {
-            Doctor tobeSaved = _mapper.Map<Doctor>(doctor);
-            Doctor savedDoctor = await this._unitOfWork.DoctorRepository.Create(tobeSaved);
-            await _unitOfWork.Commit();
-            DoctorResposeDTO doctorResposeDTO = _mapper.Map<DoctorResposeDTO>(savedDoctor);
 
-            return new CreatedAtRouteResult(
-                routeName: "GetDoctorById",
-                routeValues: new { id = doctorResposeDTO.Id },
-                value: doctorResposeDTO
-                );
+            try
+            {
+                DoctorResposeDTO doctorResposeDTO = await _service.Post(doctor);
+
+                return new CreatedAtRouteResult(
+                    routeName: "GetDoctorById",
+                    routeValues: new { id = doctorResposeDTO.Id },
+                    value: doctorResposeDTO
+                    );
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<Doctor>> Put([FromBody] DoctorUpdateDTO doctorUpdateDto, long id)
         {
-            Doctor doctor = await _unitOfWork.DoctorRepository.GetByExpression(x => x.Id == id);
 
-            doctor.Update(doctorUpdateDto);
+            try
+            {
+                DoctorResposeDTO doctorResposeDTO = await _service.Put(doctorUpdateDto, id);
 
-            _unitOfWork.DoctorRepository.Update(doctor);
-            await _unitOfWork.Commit();
-            DoctorResposeDTO doctorResposeDTO = _mapper.Map<DoctorResposeDTO>(doctor);
-
-            return Ok(doctorResposeDTO);
+                return Ok(doctorResposeDTO);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
         [HttpDelete("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<DoctorResposeDTO>> Delete(long id)
         {
-            Doctor doctor = await _unitOfWork.DoctorRepository.GetByExpression(x => x.Id == id);
-            _unitOfWork.DoctorRepository.Delete(doctor);
-            await _unitOfWork.Commit();
-            DoctorResposeDTO deleted = _mapper.Map<DoctorResposeDTO>(doctor);
-            return Ok(deleted);
+
+            try
+            {
+                DoctorResposeDTO deleted = await _service.Delete(id);
+                return Ok(deleted);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
         }
 
     }

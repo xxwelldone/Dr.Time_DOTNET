@@ -64,6 +64,7 @@ namespace DoctorTime.API
             builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
 
             builder.Services.AddAuthentication(opt =>
             {

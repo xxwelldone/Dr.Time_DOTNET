@@ -6,6 +6,6 @@ namespace DoctorTime.API.Security.Interfaces
     public interface ILoginService
     {
         Task<AuthenticationUser> CreateHashAsync(string email, string password);
-        Task<AuthenticationResponseDTO> LoginAsync(AuthenticationRequestDTO authenticationRequestDTO);
+        Task<AuthenticationResponseDTO> LoginAsync(string email, string password);
     }
 }

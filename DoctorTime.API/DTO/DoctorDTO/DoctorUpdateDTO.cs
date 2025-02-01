@@ -10,6 +10,5 @@ namespace DoctorTime.API.DTO.DoctorDTO
         [EmailAddress(ErrorMessage = "Informe e-mail válido")]
 
         public string? Email { get; set; }
-        public string? Password { get; set; }
     }
 }

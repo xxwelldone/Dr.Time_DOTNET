@@ -45,12 +45,12 @@ namespace DoctorTime.API.Security
 
         }
 
-        public async Task<AuthenticationResponseDTO> LoginAsync(AuthenticationRequestDTO authenticationRequestDTO)
+        public async Task<AuthenticationResponseDTO> LoginAsync(string email, string password)
         {
 
-            User user = await _unitOfWork.UserRepository.GetByExpression(x => x.Email == authenticationRequestDTO.Email);
-            Doctor doctor = await _unitOfWork.DoctorRepository.GetByExpression(x => x.Email == authenticationRequestDTO.Email);
-            Worker worker = await _unitOfWork.WorkerRepository.GetByExpression(x => x.Email == authenticationRequestDTO.Email);
+            User user = await _unitOfWork.UserRepository.GetByExpression(x => x.Email.ToUpper() == email.ToUpper());
+            Doctor doctor = await _unitOfWork.DoctorRepository.GetByExpression(x => x.Email.ToUpper() == email.ToUpper());
+            Worker worker = await _unitOfWork.WorkerRepository.GetByExpression(x => x.Email.ToUpper() == email.ToUpper());
 
             if (user == null && doctor == null && worker == null)
             {
@@ -58,14 +58,14 @@ namespace DoctorTime.API.Security
             }
             else
             {
-                bool isVerified = await _authenticateService.AuthenticateAsync(authenticationRequestDTO.Email, authenticationRequestDTO.Password);
+                bool isVerified = await _authenticateService.AuthenticateAsync(email, password);
                 if (!isVerified)
                 {
                     throw new Exception("Usuário ou senha incorretos");
                 }
 
-                string token = await _authenticateService.GenerateToken(authenticationRequestDTO.Email);
-                return new AuthenticationResponseDTO { Email = authenticationRequestDTO.Email,Token = token };
+                string token = await _authenticateService.GenerateToken(email);
+                return new AuthenticationResponseDTO { Email = email,Token = token };
             }
 
 

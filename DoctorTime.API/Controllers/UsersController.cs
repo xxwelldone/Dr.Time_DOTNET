@@ -3,6 +3,7 @@ using DoctorTime.API.DTO.UserDTO;
 using DoctorTime.API.Entities;
 using DoctorTime.API.Repository.Interfaces;
 using DoctorTime.API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,8 @@ namespace DoctorTime.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+
         public async Task<ActionResult<IEnumerable<UserResponseDTO>>> Get()
         {
             try
@@ -36,6 +39,8 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpGet("{id}", Name = "GetUserById")]
+        [Authorize]
+
         public async Task<ActionResult<UserResponseDTO>> GetById(long id)
         {
             try
@@ -66,6 +71,8 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<UserResponseDTO>> Put(long id, [FromBody] UserUpdateDTO userUpdateDTO)
         {
             try
@@ -80,6 +87,8 @@ namespace DoctorTime.API.Controllers
 
         }
         [HttpDelete("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<UserResponseDTO>> Delete(long id)
         {
             try
