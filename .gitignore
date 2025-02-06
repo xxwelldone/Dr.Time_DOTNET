@@ -365,3 +365,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /DoctorTime.API/appsettings.Development.json
+*.env
+*.env
+/DoctorTime.API/.env
