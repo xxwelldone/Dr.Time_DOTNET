@@ -54,6 +54,7 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<WorkerResponseDTO>> Post([FromBody] WorkerRequestDTO worker)
         {
             try
