@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DoctorTime.API.DTO.AppointmentDTO;
 using DoctorTime.API.DTO.DoctorDTO;
 using DoctorTime.API.DTO.UserDTO;
 using DoctorTime.API.DTO.WorkerDTO;
@@ -20,6 +21,9 @@ namespace DoctorTime.API.DTO.Mapping
 
             CreateMap<Worker, WorkerResponseDTO>();
             CreateMap<WorkerRequestDTO, Worker>();
+
+            CreateMap<Appointment, AppointmentResponseDTO>();
+            CreateMap<AppointmentRequestDTO, Appointment>();
 
 
         }

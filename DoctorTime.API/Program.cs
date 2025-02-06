@@ -13,6 +13,7 @@ using System.Text;
 using DoctorTime.API.Services.Interfaces;
 using DoctorTime.API.Services;
 using DoctorTime.API.DTO.Mapping;
+using Microsoft.Extensions.Options;
 
 namespace DoctorTime.API
 {
@@ -66,6 +67,7 @@ namespace DoctorTime.API
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IWorkerService, WorkerService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
             builder.Services.AddAuthentication(opt =>
             {
@@ -83,8 +85,10 @@ namespace DoctorTime.API
                         ValidIssuer = builder.Configuration["jwt:issuer"],
                         ValidAudience = builder.Configuration["jwt:audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                        .GetBytes(builder.Configuration["jwt:secretkey"]))
+                        .GetBytes(builder.Configuration["jwt:secretkey"])),
+                        RoleClaimType = "role"
                     };
+                    opt.MapInboundClaims = false;
                 }
                 );
 

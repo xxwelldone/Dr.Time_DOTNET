@@ -3,6 +3,7 @@ using System.Text;
 using DoctorTime.API.DTO.AuthencationDTO;
 using DoctorTime.API.DTO.LoginDTO;
 using DoctorTime.API.Entities;
+using DoctorTime.API.Entities.Enums;
 using DoctorTime.API.Repository.Interfaces;
 using DoctorTime.API.Security.Interfaces;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
@@ -58,6 +59,8 @@ namespace DoctorTime.API.Security
             }
             else
             {
+
+
                 bool isVerified = await _authenticateService.AuthenticateAsync(email, password);
                 if (!isVerified)
                 {
@@ -65,7 +68,7 @@ namespace DoctorTime.API.Security
                 }
 
                 string token = await _authenticateService.GenerateToken(email);
-                return new AuthenticationResponseDTO { Email = email,Token = token };
+                return new AuthenticationResponseDTO { Email = email, Token = token };
             }
 
 

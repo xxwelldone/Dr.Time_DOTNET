@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DoctorTime.API.Security
 {
-    public class AuthenticateService :IAuthenticateService
+    public class AuthenticateService : IAuthenticateService
     {
 
         private readonly IConfiguration _configuration;
@@ -89,7 +89,8 @@ namespace DoctorTime.API.Security
                 {
                 new Claim("id", user.Id.ToString()),
                 new Claim("email", user.Email),
-               new Claim("cpf", user.Cpf),
+                new Claim("cpf", user.Cpf),
+                new Claim("role", user.Role.ToString()),
 
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
@@ -114,6 +115,7 @@ namespace DoctorTime.API.Security
                 new Claim("email", doctor.Email),
                new Claim("crm", doctor.Crm),
                new Claim("speciality", doctor.Speciality.ToString()),
+                new Claim("role", doctor.Role.ToString()),
 
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 
@@ -137,6 +139,8 @@ namespace DoctorTime.API.Security
                 new Claim("id", worker.Id.ToString()),
                 new Claim("email", worker.Email),
                new Claim("crm", worker.Setor),
+               new Claim("role", worker.Role.ToString()),
+
 
 
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -154,6 +158,6 @@ namespace DoctorTime.API.Security
 
         }
 
-  
+
     }
 }

@@ -16,6 +16,7 @@ namespace DoctorTime.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class DoctorsController : ControllerBase
     {
         IDoctorService _service;
@@ -26,7 +27,7 @@ namespace DoctorTime.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles ="WORKER")]
 
         public async Task<ActionResult<IEnumerable<DoctorResposeDTO>>> Get()
         {
@@ -43,10 +44,11 @@ namespace DoctorTime.API.Controllers
 
         }
         [HttpGet("{id}", Name = "GetDoctorById")]
-        [Authorize]
+       
 
         public async Task<ActionResult<DoctorResposeDTO>> GetById(long id)
         {
+            
             try
             {
                 DoctorResposeDTO doctorResposeDTO = await _service.GetById(id);
@@ -59,7 +61,6 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpGet("/{specialty}")]
-        [Authorize]
 
         public async Task<ActionResult<IEnumerable<DoctorResposeDTO>>> GetBySpecialty(string specialty)
         {
@@ -74,6 +75,7 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles ="WORKER")]
         public async Task<ActionResult<DoctorResposeDTO>> Post([FromBody] DoctorRequestDTO doctor)
         {
 
@@ -93,7 +95,7 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles ="DOCTOR")]
 
         public async Task<ActionResult<Doctor>> Put([FromBody] DoctorUpdateDTO doctorUpdateDto, long id)
         {
@@ -111,7 +113,7 @@ namespace DoctorTime.API.Controllers
 
         }
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles ="WORKER")]
 
         public async Task<ActionResult<DoctorResposeDTO>> Delete(long id)
         {

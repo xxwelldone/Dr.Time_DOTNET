@@ -18,6 +18,7 @@ namespace DoctorTime.API.Context
         {
 
             modelBuilder.Entity<Doctor>(entity => entity.HasKey(e => e.Id));
+            modelBuilder.Entity<Doctor>().Property(e => e.Id).ValueGeneratedOnAdd().IsRequired();
             modelBuilder.Entity<Doctor>().Property(e => e.Speciality).HasConversion<string>();
             modelBuilder.Entity<Doctor>().Property(e => e.Role).HasConversion<string>();
             modelBuilder.Entity<Doctor>().HasIndex(e => e.Email).IsUnique();
@@ -27,6 +28,7 @@ namespace DoctorTime.API.Context
                  .OnDelete(DeleteBehavior.Restrict); ;
 
             modelBuilder.Entity<User>(entity => entity.HasKey(e => e.Id));
+            modelBuilder.Entity<User>().Property(e => e.Id).ValueGeneratedOnAdd().IsRequired();
             modelBuilder.Entity<User>().Property(e => e.Role).HasConversion<string>();
             modelBuilder.Entity<User>().HasIndex(e => e.Email).IsUnique();
             modelBuilder.Entity<User>().HasIndex(e => e.Cpf).IsUnique();
@@ -34,18 +36,13 @@ namespace DoctorTime.API.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>(entity => entity.HasKey(e => e.Id));
+            modelBuilder.Entity<Appointment>().Property(e => e.Id).ValueGeneratedOnAdd().IsRequired();
             modelBuilder.Entity<Appointment>().Property(e => e.Status).HasConversion<string>();
 
-            modelBuilder.Entity<Appointment>().HasOne(a => a.Doctor)
-                .WithMany(e => e.Appointments)
-                .HasForeignKey(o => o.DoctorId)
-                .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Appointment>().HasOne(a => a.User)
-    .WithMany(e => e.Appointments)
-    .HasForeignKey(o => o.UserId)
-     .OnDelete(DeleteBehavior.Restrict);
+            
 
             modelBuilder.Entity<Worker>(entity => entity.HasKey(e => e.Id));
+            modelBuilder.Entity<Worker>().Property(e => e.Id).ValueGeneratedOnAdd().IsRequired();
             modelBuilder.Entity<Worker>().Property(e => e.Role).HasConversion<string>();
             modelBuilder.Entity<Worker>().HasIndex(e => e.Email).IsUnique();
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using DoctorTime.API.DTO.UserDTO;
 using DoctorTime.API.Entities;
 using DoctorTime.API.Repository.Interfaces;
@@ -12,6 +13,7 @@ namespace DoctorTime.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
 
@@ -24,7 +26,6 @@ namespace DoctorTime.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
 
         public async Task<ActionResult<IEnumerable<UserResponseDTO>>> Get()
         {
@@ -39,7 +40,7 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpGet("{id}", Name = "GetUserById")]
-        [Authorize]
+
 
         public async Task<ActionResult<UserResponseDTO>> GetById(long id)
         {
@@ -71,7 +72,7 @@ namespace DoctorTime.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        [Authorize]
+  
 
         public async Task<ActionResult<UserResponseDTO>> Put(long id, [FromBody] UserUpdateDTO userUpdateDTO)
         {
@@ -87,7 +88,7 @@ namespace DoctorTime.API.Controllers
 
         }
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles ="WORKER")]
 
         public async Task<ActionResult<UserResponseDTO>> Delete(long id)
         {

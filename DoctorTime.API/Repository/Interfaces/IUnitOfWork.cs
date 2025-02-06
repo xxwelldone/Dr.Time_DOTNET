@@ -5,6 +5,7 @@
         IDoctorRepository  DoctorRepository { get; }
         IWorkerRepository WorkerRepository { get; }
         IUserRepository UserRepository { get; }
+        IAppointmentRepository AppointmentRepository { get; }
         Task Commit();
 
     }

@@ -13,6 +13,7 @@ namespace DoctorTime.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "WORKER")]
     public class WorkersController : ControllerBase
     {
         private readonly IWorkerService _workerService;

@@ -1,6 +1,7 @@
 ﻿
 
 using DoctorTime.API.Entities;
+using DoctorTime.API.Entities.Enums;
 
 namespace DoctorTime.API.Security.Interfaces
 {

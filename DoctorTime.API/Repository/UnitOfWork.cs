@@ -9,6 +9,7 @@ namespace DoctorTime.API.Repository
 
         private IWorkerRepository _workerRepository;
         private IUserRepository _userRepository;
+        private IAppointmentRepository _appointmentRepository;
         public PostgreSQL _context;
 
         public UnitOfWork(PostgreSQL context)
@@ -23,6 +24,7 @@ namespace DoctorTime.API.Repository
             }
         }
         public IUserRepository UserRepository { get { return _userRepository = _userRepository ?? new UserRepository(_context); } }
+        public IAppointmentRepository AppointmentRepository => _appointmentRepository = _appointmentRepository ?? new AppointmentRepository(_context);
         public IWorkerRepository WorkerRepository
         {
             get
