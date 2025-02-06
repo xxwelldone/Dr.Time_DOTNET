@@ -104,6 +104,11 @@ namespace DoctorTime.API
             //    app.UseSwaggerUI();
             //}
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<PostgreSQL>();
+                dbContext.Database.Migrate();
+            }
             app.UseSwagger();
             app.UseSwaggerUI();
 
