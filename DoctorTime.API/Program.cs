@@ -22,7 +22,8 @@ namespace DoctorTime.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            string variable = Environment.GetEnvironmentVariable("DATABASE_URL");
+            Console.WriteLine("Variable: ", variable);
             // Add services to the container.
 
             builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -60,7 +61,7 @@ namespace DoctorTime.API
 
 
             string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<PostgreSQL>(opt => opt.UseNpgsql(connection));
+            builder.Services.AddDbContext<PostgreSQL>(opt => opt.UseNpgsql(variable??connection));
 
             builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
