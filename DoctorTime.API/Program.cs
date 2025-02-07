@@ -95,6 +95,24 @@ namespace DoctorTime.API
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(DTOMapping));
+
+
+
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("AllowedList", policy =>
+                {
+
+                    policy.WithOrigins("http://localhost:4200", "https://drtime.vercel.app")
+                    .AllowAnyMethod()
+                     .AllowAnyHeader()
+                    .AllowCredentials();
+
+
+                });
+            }
+              );
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -109,20 +127,7 @@ namespace DoctorTime.API
                 var dbContext = scope.ServiceProvider.GetRequiredService<PostgreSQL>();
                 dbContext.Database.Migrate();
             }
-            builder.Services.AddCors(opt =>
-            {
-                opt.AddPolicy("AllowedList", policy =>
-                {
-
-                    policy.WithOrigins("http://localhost:4200", "https://drtime.vercel.app")
-                    .AllowAnyMethod()
-                     .AllowAnyHeader();
-                    //.AllowCredentials();
-
-
-                });
-            }
-                );
+          
             app.UseSwagger();
             app.UseSwaggerUI();
 
