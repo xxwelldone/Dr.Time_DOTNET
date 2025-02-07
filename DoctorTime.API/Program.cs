@@ -22,7 +22,7 @@ namespace DoctorTime.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            Console.WriteLine("Variable: ", variable);
+
             // Add services to the container.
 
             builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -125,6 +125,7 @@ namespace DoctorTime.API
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseCors();
             app.UseAuthorization();
 
 
