@@ -116,9 +116,9 @@ namespace DoctorTime.API
 
                     policy.WithOrigins("http://localhost:4200", "https://drtime.vercel.app")
                     .AllowAnyMethod()
-                    .AllowAnyMethod()
+                     .AllowAnyHeader()
                     .AllowCredentials();
-                    
+
 
                 });
             }
