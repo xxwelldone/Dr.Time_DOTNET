@@ -109,18 +109,18 @@ namespace DoctorTime.API
                 var dbContext = scope.ServiceProvider.GetRequiredService<PostgreSQL>();
                 dbContext.Database.Migrate();
             }
-            builder.Services.AddCors(opt =>
-            {
-                opt.AddPolicy("AllowedList", policy =>
-                {
+            //builder.Services.AddCors(opt =>
+            //{
+            //    opt.AddPolicy("AllowedList", policy =>
+            //    {
 
-                    policy.WithOrigins("http://localhost:4200/", "https://drtime.vercel.app/")
-                    .AllowAnyMethod()
-                    .AllowCredentials();
+            //        policy.WithOrigins("http://localhost:4200/", "https://drtime.vercel.app/")
+            //        .AllowAnyMethod()
+            //        .AllowCredentials();
 
-                });
-            }
-                );
+            //    });
+            //}
+            //    );
             app.UseSwagger();
             app.UseSwaggerUI();
 
