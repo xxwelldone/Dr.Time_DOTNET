@@ -13,7 +13,7 @@ using System.Text;
 using DoctorTime.API.Services.Interfaces;
 using DoctorTime.API.Services;
 using DoctorTime.API.DTO.Mapping;
-using Microsoft.Extensions.Options;
+
 
 namespace DoctorTime.API
 {
@@ -22,7 +22,6 @@ namespace DoctorTime.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            string variable = Environment.GetEnvironmentVariable("DATABASE_URL");
             Console.WriteLine("Variable: ", variable);
             // Add services to the container.
 
@@ -61,7 +60,7 @@ namespace DoctorTime.API
 
 
             string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<PostgreSQL>(opt => opt.UseNpgsql(variable??connection));
+            builder.Services.AddDbContext<PostgreSQL>(opt => opt.UseNpgsql(connection));
 
             builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
@@ -109,6 +108,18 @@ namespace DoctorTime.API
                 var dbContext = scope.ServiceProvider.GetRequiredService<PostgreSQL>();
                 dbContext.Database.Migrate();
             }
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("AllowedList", policy =>
+                {
+
+                    policy.WithOrigins("http://localhost:4200/", "https://drtime.vercel.app/")
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+
+                });
+            }
+                );
             app.UseSwagger();
             app.UseSwaggerUI();
 
