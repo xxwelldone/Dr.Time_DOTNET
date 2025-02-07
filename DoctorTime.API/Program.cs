@@ -24,7 +24,8 @@ namespace DoctorTime.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            string variable = Environment.GetEnvironmentVariable("DATABASE_URL");
+            Console.WriteLine("Variable: ", variable);
             builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -60,7 +61,7 @@ namespace DoctorTime.API
 
 
             string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<PostgreSQL>(opt => opt.UseNpgsql(connection));
+            builder.Services.AddDbContext<PostgreSQL>(opt => opt.UseNpgsql(variable ?? connection));
 
             builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
             builder.Services.AddScoped<ILoginService, LoginService>();
