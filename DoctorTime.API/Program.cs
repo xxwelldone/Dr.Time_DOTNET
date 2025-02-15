@@ -25,7 +25,6 @@ namespace DoctorTime.API
 
             // Add services to the container.
             string variable = Environment.GetEnvironmentVariable("DATABASE_URL");
-            Console.WriteLine("Variable: ", variable);
             builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
